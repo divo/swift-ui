@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		935F908B2A2E70DE009E6348 /* PhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935F908A2A2E70DE009E6348 /* PhotoView.swift */; };
 		93F9493F2A2CEE78007FAAE3 /* ImageViewerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93F9493E2A2CEE78007FAAE3 /* ImageViewerApp.swift */; };
 		93F949412A2CEE78007FAAE3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93F949402A2CEE78007FAAE3 /* ContentView.swift */; };
 		93F949432A2CEE79007FAAE3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 93F949422A2CEE79007FAAE3 /* Assets.xcassets */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		935F908A2A2E70DE009E6348 /* PhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoView.swift; sourceTree = "<group>"; };
 		93F9493B2A2CEE78007FAAE3 /* ImageViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		93F9493E2A2CEE78007FAAE3 /* ImageViewerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewerApp.swift; sourceTree = "<group>"; };
 		93F949402A2CEE78007FAAE3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -58,6 +60,7 @@
 			children = (
 				93F9493E2A2CEE78007FAAE3 /* ImageViewerApp.swift */,
 				93F949402A2CEE78007FAAE3 /* ContentView.swift */,
+				935F908A2A2E70DE009E6348 /* PhotoView.swift */,
 				93F9494F2A2CEFD1007FAAE3 /* Remote.swift */,
 				93F9494D2A2CEFB7007FAAE3 /* Photo.swift */,
 				93F949422A2CEE79007FAAE3 /* Assets.xcassets */,
@@ -148,6 +151,7 @@
 				93F9494E2A2CEFB7007FAAE3 /* Photo.swift in Sources */,
 				93F949412A2CEE78007FAAE3 /* ContentView.swift in Sources */,
 				93F9493F2A2CEE78007FAAE3 /* ImageViewerApp.swift in Sources */,
+				935F908B2A2E70DE009E6348 /* PhotoView.swift in Sources */,
 				93F949502A2CEFD1007FAAE3 /* Remote.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

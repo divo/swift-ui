@@ -15,9 +15,9 @@ struct ContentView: View {
       if let photos = remote.data {
         List {
           ForEach(photos) { photo in
-            Text(photo.author)
+            NavigationLink(photo.author, destination: PhotoView(url_string: photo.download_url))
           }
-        }
+        }.navigationTitle("Photos")
       } else {
         Text("Loading data")
       }
@@ -26,7 +26,7 @@ struct ContentView: View {
     }
   }
 }
-    
+
 struct ContentView_Previews: PreviewProvider {
   static var previews: some View {
     ContentView()
