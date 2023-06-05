@@ -27,6 +27,7 @@ struct ContentView: View {
                 Text("You've tapped \(counter) times")
             } else {
                 Text("You've not yet tapped")
+                    .padding()
             }
         }
     }
