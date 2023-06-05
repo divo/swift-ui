@@ -12,10 +12,15 @@ struct ContentView: View {
   
   var body: some View {
     NavigationView {
-      if let photos = remote.data {
+      if !remote.data.isEmpty {
         List {
-          ForEach(photos) { photo in
+          ForEach(remote.data) { photo in
             NavigationLink(photo.author, destination: PhotoView(url_string: photo.download_url))
+          }
+          Rectangle()
+            .frame(width: 0, height: 0)
+            .onAppear {
+            remote.page()
           }
         }.navigationTitle("Photos")
       } else {

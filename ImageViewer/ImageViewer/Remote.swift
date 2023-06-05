@@ -8,24 +8,32 @@
 import Foundation
 
 class Remote: ObservableObject {
-  let url : URL
-  @Published var data: [Photo]?
+  var urlComponents : URLComponents
+  var current_page = 0
+  
+  @Published var data: [Photo] = []
   
   init(url: URL) {
-    self.url = url
-    self.data = nil
+    self.urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)!
   }
   
-  func load() {
-    URLSession.shared.dataTask(with: url) { data, response, error in
+  func load(page: Int = 0) {
+    let query = URLQueryItem(name: "page", value: String(page))
+    urlComponents.queryItems = [query]
+    URLSession.shared.dataTask(with: urlComponents.url!) { data, response, error in
       if let data = data {
         if let decodedResponse = try? JSONDecoder().decode([Photo].self, from: data) {
           DispatchQueue.main.async {
-            self.data = decodedResponse
+            self.data += decodedResponse
           }
           return
         }
       }
     }.resume()
+  }
+  
+  func page() {
+    current_page += 1
+    load(page: current_page)
   }
 }
