@@ -23,8 +23,16 @@ struct ContentView: View {
         }
       }
       PhotosPicker(selection: $viewModel.imageSelections, maxSelectionCount: 150, matching: .images, photoLibrary: .shared()) {
-        Text("Select Photos")
+        Text("Select Photos").padding(20)
       }
+      
+      if !viewModel.ui_images.isEmpty {
+        Button("Upload images") {
+          viewModel.upload_images()
+        }.padding(20)
+        
+      }
+      
       List(viewModel.images, id: \.self) { image in
         image.image
           .resizable()
