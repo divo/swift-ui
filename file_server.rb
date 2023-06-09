@@ -13,7 +13,7 @@ set :port, 8000
 # Set the maximum allowed file size (in bytes)
 # Adjust the value as per your requirements
 configure do
-  set :max_file_size, 15_000_000 # 15 MB
+  set :max_file_size, 45_000_000 # 15 MB
 end
 
 post '/upload' do
