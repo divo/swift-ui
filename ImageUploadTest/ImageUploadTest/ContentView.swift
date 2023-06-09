@@ -9,30 +9,22 @@ import SwiftUI
 import PhotosUI
 
 struct ContentView: View {
+  let readWriteStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+  
   @ObservedObject var viewModel = PhotoModel()
-  
-  let gridLayout = [
-    GridItem(.flexible()),
-    GridItem(.flexible()),
-  ]
-  
   var body: some View {
     VStack {
-      PhotosPicker(selection: $viewModel.imageSelections, matching: .images, photoLibrary: .shared()) {
+      if readWriteStatus != .authorized {
+        Button("Allow photo access") {
+          PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
+            // https://developer.apple.com/documentation/photokit/delivering_an_enhanced_privacy_experience_in_your_photos_app
+            // TODO: Display status and remind user if it's limited
+          }
+        }
+      }
+      PhotosPicker(selection: $viewModel.imageSelections, maxSelectionCount: 150, matching: .images, photoLibrary: .shared()) {
         Text("Select Photos")
       }
-      //      ScrollView {
-      //        LazyVGrid(columns: gridLayout, spacing: 16) {
-      //          ForEach($viewModel.images, id: \.self) { image in
-      //            image.wrappedValue
-      //              .resizable()
-      //              .aspectRatio(contentMode: .fill)
-      //              .frame(height: 120)
-      //              .clipped()
-      //          }
-      //        }
-      //        .padding(16)
-      //      }
       List(viewModel.images, id: \.self) { image in
         image.image
           .resizable()
