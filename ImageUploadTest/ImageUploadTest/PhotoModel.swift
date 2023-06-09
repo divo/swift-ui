@@ -12,7 +12,7 @@ import Alamofire
 
 class PhotoModel: ObservableObject {
   @Published var images: [HashableImage] = []
-  var ui_images: [UIImage] = []
+  var image_data: [Data] = []
   
   @Published var imageSelections: [PhotosPickerItem] = [] {
     didSet {
@@ -24,6 +24,7 @@ class PhotoModel: ObservableObject {
   
   struct TransferableImage: Transferable {
     let image: UIImage
+    let data: Data
     
     enum TransferError: Error {
       case importFailed
@@ -35,7 +36,7 @@ class PhotoModel: ObservableObject {
           throw TransferError.importFailed
           
         }
-        return TransferableImage(image: uiImage)
+        return TransferableImage(image: uiImage, data: data)
       }
     }
   }
@@ -48,7 +49,7 @@ class PhotoModel: ObservableObject {
           let h_image = HashableImage(id: imageSelection.itemIdentifier, image: Image(uiImage: trans_image.image))
           if !self.images.contains(h_image) {
             self.images.append(h_image)
-            self.ui_images.append(trans_image.image)
+            self.image_data.append(trans_image.data)
           }
         case .success(nil):
           // TODO: Add states for images
@@ -61,20 +62,13 @@ class PhotoModel: ObservableObject {
   }
   
   func upload_images() {
-    uploadImageToServer(ui_images.first!)
+    uploadImageToServer(image_data.first!)
   }
   
   struct DecodableType: Decodable { let url: String }
 
-  private func uploadImageToServer(_ image: UIImage) {
-    guard let imageData = image.jpegData(compressionQuality: 0.9) else {
-      print("Failed to convert image to data")
-      return
-    }
-    
+  private func uploadImageToServer(_ imageData: Data) {
     let url = "http://192.168.0.88:8000/upload"
-//    let url = "https://httpbin.org/post"
-//    let url = "https://entayykiw4hk9.x.pipedream.net"
 
     AF.upload(multipartFormData: { multipartFormData in
       multipartFormData.append(imageData, withName: "file", fileName: "image.jpg", mimeType: "image/jpeg")

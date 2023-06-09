@@ -26,7 +26,7 @@ struct ContentView: View {
         Text("Select Photos").padding(20)
       }
       
-      if !viewModel.ui_images.isEmpty {
+      if !viewModel.image_data.isEmpty {
         Button("Upload images") {
           viewModel.upload_images()
         }.padding(20)
