@@ -19,12 +19,41 @@ class PhotoModel: ObservableObject {
     }
   }
   
+  struct TransferableImage: Transferable {
+    let image: Image
+    
+    enum TransferError: Error {
+        case importFailed
+    }
+    
+    static var transferRepresentation: some TransferRepresentation {
+      DataRepresentation(importedContentType: .image) { data in
+#if canImport(AppKit)
+        guard let nsImage = NSImage(data: data) else {
+          throw TransferError.importFailed
+        }
+        let image = Image(nsImage: nsImage)
+        return ProfileImage(image: image)
+#elseif canImport(UIKit)
+        guard let uiImage = UIImage(data: data) else {
+          throw TransferError.importFailed
+          
+        }
+        let image = Image(uiImage: uiImage)
+        return TransferableImage(image: image)
+#else
+        throw TransferError.importFailed
+#endif
+      }
+    }
+  }
+  
   private func loadTransferable(from imageSelection: PhotosPickerItem) -> Progress {
-    return imageSelection.loadTransferable(type: Image.self) { result in
+    return imageSelection.loadTransferable(type: TransferableImage.self) { result in
       DispatchQueue.main.async {
         switch result {
         case .success(let image?):
-          let h_image = HashableImage(id: imageSelection.itemIdentifier, image: image)
+          let h_image = HashableImage(id: imageSelection.itemIdentifier, image: image.image)
           if !self.images.contains(h_image) {
             self.images.append(h_image)
           }
