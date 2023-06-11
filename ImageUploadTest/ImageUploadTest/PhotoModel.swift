@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import PhotosUI
 import Alamofire
+import ImageIO
 
 class PhotoModel: ObservableObject {
   @Published var images: [HashableImage] = []
@@ -50,6 +51,7 @@ class PhotoModel: ObservableObject {
           if !self.images.contains(h_image) {
             self.images.append(h_image)
             self.image_data.append(trans_image.data)
+            self.extractGPSData(from: trans_image.data)
           }
         case .success(nil):
           // TODO: Add states for images
@@ -66,10 +68,11 @@ class PhotoModel: ObservableObject {
   }
   
   struct DecodableType: Decodable { let url: String }
-
+  
   private func uploadImageToServer(_ imageData: Data) {
     let url = "http://192.168.0.88:8000/upload"
-
+    let ui_image = UIImage(data: imageData)
+    
     AF.upload(multipartFormData: { multipartFormData in
       multipartFormData.append(imageData, withName: "file", fileName: "image.jpg", mimeType: "image/jpeg")
     }, to: url)
@@ -79,5 +82,38 @@ class PhotoModel: ObservableObject {
     .responseDecodable(of: DecodableType.self) { response in
       debugPrint(response)
     }
+  }
+  
+  func extractGPSData(from imageData: Data) -> CLLocationCoordinate2D? {
+    guard let imageSource = CGImageSourceCreateWithData(imageData as CFData, nil) else {
+      print("Failed to create image source")
+      return nil
+    }
+    
+    guard let imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [String: Any] else {
+      print("Failed to extract image properties")
+      return nil
+    }
+    
+    if let gpsDictionary = imageProperties[kCGImagePropertyGPSDictionary as String] as? [String: Any],
+       let latitudeRef = gpsDictionary[kCGImagePropertyGPSLatitudeRef as String] as? String,
+       let latitude = gpsDictionary[kCGImagePropertyGPSLatitude as String] as? Double,
+       let longitudeRef = gpsDictionary[kCGImagePropertyGPSLongitudeRef as String] as? String,
+       let longitude = gpsDictionary[kCGImagePropertyGPSLongitude as String] as? Double {
+      
+      var coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+      
+      if latitudeRef == "S" {
+        coordinate.latitude *= -1
+      }
+      
+      if longitudeRef == "W" {
+        coordinate.longitude *= -1
+      }
+      
+      return coordinate
+    }
+    
+    return nil
   }
 }
