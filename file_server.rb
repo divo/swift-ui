@@ -17,19 +17,17 @@ configure do
 end
 
 post '/upload' do
-  # Check if a file was sent
-  unless params[:file]
-    return 'No file selected'
-  end
-
-  # Check the file size
-  if params[:file][:tempfile].size > settings.max_file_size
-    return 'File size exceeds the limit'
-  end
-
-  # Save the file to the 'uploads' directory
-  File.open(params[:file][:filename], 'wb') do |file|
-    file.write(params[:file][:tempfile].read)
+  index = 0
+  while (file = params["file#{index}"])
+    filename = file[:name] # TODO: Info is in the header, need to parse it
+    tempfile = file[:tempfile]
+    
+    # Save the file to the 'uploads' directory
+    File.open("uploads/#{filename}.jpeg", 'wb') do |f|
+      f.write(tempfile.read)
+    end
+    
+    index += 1
   end
 
   'File uploaded successfully'

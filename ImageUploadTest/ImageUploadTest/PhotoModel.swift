@@ -20,6 +20,14 @@ class PhotoModel: ObservableObject {
       }
     }
   }
+  
+  func form_data() -> [String : Data] {
+    images.reduce(into: [:]) { partialResult, image in
+      if let data = image.jpegData() {
+        partialResult[image.id] = data
+      }
+    }
+  }
  
   private func loadTransferable(from imageSelection: PhotosPickerItem) -> Progress {
     return imageSelection.loadTransferable(type: TransferableImageWithMetadata.self) { result in
@@ -27,7 +35,7 @@ class PhotoModel: ObservableObject {
         switch result {
         case .success(let trans_image?):
           let hashableImage = ImageModel(id : imageSelection.itemIdentifier,
-                                            image: trans_image.image,
+                                            uiImage: trans_image.image,
                                             metadata: trans_image.metadata)
           if !self.images.contains(hashableImage) {
             self.images.append(hashableImage)

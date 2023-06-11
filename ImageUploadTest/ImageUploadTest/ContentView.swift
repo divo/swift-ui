@@ -29,7 +29,7 @@ struct ContentView: View {
       
       if !viewModel.images.isEmpty {
         Button("Upload images") {
-//          client.uploadImagesToServer()
+          client.upload(viewModel.form_data())
         }.padding(20)
         
       }
@@ -43,8 +43,7 @@ struct ContentView: View {
             .clipped()
           
           if let gps = image.gpsDictionary() {
-            MapView(coordinate: gps)
-              .frame(height: 200)
+//            MapView(coordinate: gps).frame(height: 200)
           }
         }
       }

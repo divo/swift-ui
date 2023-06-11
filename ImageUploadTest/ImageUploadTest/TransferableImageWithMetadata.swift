@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct TransferableImageWithMetadata: Transferable {
-  let image: Image
+  let image: UIImage
   let metadata: [String : Any]?
   
   enum TransferError: Error {
@@ -22,11 +22,9 @@ struct TransferableImageWithMetadata: Transferable {
       guard let uiImage = UIImage(data: data) else {
         throw TransferError.importFailed
       }
-      
-      let image = Image(uiImage: uiImage)
       let metadata = extractMetadata(from: data)
       
-      return TransferableImageWithMetadata(image: image, metadata: metadata)
+      return TransferableImageWithMetadata(image: uiImage, metadata: metadata)
     }
   }
   
