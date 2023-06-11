@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct HashableImage: Hashable, Equatable {
+struct ImageModel: Hashable, Equatable {
   let id: String
   let image: Image
   let metadata: [String : Any]?
@@ -23,14 +23,14 @@ struct HashableImage: Hashable, Equatable {
     hasher.combine(id)
   }
 
-  static func ==(lhs: HashableImage, rhs: HashableImage) -> Bool {
+  static func ==(lhs: ImageModel, rhs: ImageModel) -> Bool {
     return lhs.id == rhs.id
   }
 }
 
 import CoreLocation
 
-extension HashableImage {
+extension ImageModel {
   func gpsDictionary() -> CLLocationCoordinate2D? {
     guard let imageProperties = metadata else { return nil }
     

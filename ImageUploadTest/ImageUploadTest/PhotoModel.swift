@@ -11,7 +11,7 @@ import PhotosUI
 import ImageIO
 
 class PhotoModel: ObservableObject {
-  @Published var images: [HashableImage] = []
+  @Published var images: [ImageModel] = []
   
   @Published var imageSelections: [PhotosPickerItem] = [] {
     didSet {
@@ -26,8 +26,7 @@ class PhotoModel: ObservableObject {
       DispatchQueue.main.async {
         switch result {
         case .success(let trans_image?):
-          // I want to extract the metadata, compress the image and add the metadata back in
-          let hashableImage = HashableImage(id : imageSelection.itemIdentifier,
+          let hashableImage = ImageModel(id : imageSelection.itemIdentifier,
                                             image: trans_image.image,
                                             metadata: trans_image.metadata)
           if !self.images.contains(hashableImage) {
