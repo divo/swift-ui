@@ -10,6 +10,7 @@ import PhotosUI
 
 struct ContentView: View {
   let readWriteStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+  let client = Client()
   
   @ObservedObject var viewModel = PhotoModel()
   var body: some View {
@@ -26,19 +27,26 @@ struct ContentView: View {
         Text("Select Photos").padding(20)
       }
       
-      if !viewModel.image_data.isEmpty {
+      if !viewModel.images.isEmpty {
         Button("Upload images") {
-          viewModel.upload_images()
+//          client.uploadImagesToServer()
         }.padding(20)
         
       }
       
       List(viewModel.images, id: \.self) { image in
-        image.image
-          .resizable()
-          .aspectRatio(contentMode: .fill)
-          .frame(height: 120)
-          .clipped()
+        HStack {
+          image.image
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(height: 250)
+            .clipped()
+          
+          if let gps = image.gpsDictionary() {
+            MapView(coordinate: gps)
+              .frame(height: 200)
+          }
+        }
       }
     }
   }
