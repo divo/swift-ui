@@ -22,23 +22,9 @@ struct TransferableImageWithMetadata: Transferable {
       guard let uiImage = UIImage(data: data) else {
         throw TransferError.importFailed
       }
-      let metadata = extractMetadata(from: data)
+      let metadata = ImageMetadataUtil.extractMetadata(from: data)
       
       return TransferableImageWithMetadata(image: uiImage, metadata: metadata)
     }
-  }
-  
-  private static func extractMetadata(from imageData: Data) -> [String: Any]? {
-    guard let imageSource = CGImageSourceCreateWithData(imageData as CFData, nil) else {
-      print("Failed to create image source")
-      return nil
-    }
-    
-    guard let imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [String: Any] else {
-      print("Failed to extract image properties")
-      return nil
-    }
-    
-    return imageProperties
   }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-
+import CoreLocation
 
 struct ImageModel: Hashable, Equatable {
   let id: String
@@ -31,41 +31,25 @@ struct ImageModel: Hashable, Equatable {
   }
 }
 
-extension ImageModel { 
+extension ImageModel {
   func jpegData() -> Data? {
     guard let data = uiImage.jpegData(compressionQuality: 0.9) else {
       print("Unable ebale to encode JPEG data")
       return nil
     }
-    return data
+    
+    guard let metadata = self.metadata else {
+      return data
+    }
+    
+    return ImageMetadataUtil.writeMetadataToImageData(sourceData: data, metadata: metadata)
   }
 }
-
-import CoreLocation
 
 extension ImageModel {
   func gpsDictionary() -> CLLocationCoordinate2D? {
     guard let imageProperties = metadata else { return nil }
     
-    if let gpsDictionary = imageProperties[kCGImagePropertyGPSDictionary as String] as? [String: Any],
-       let latitudeRef = gpsDictionary[kCGImagePropertyGPSLatitudeRef as String] as? String,
-       let latitude = gpsDictionary[kCGImagePropertyGPSLatitude as String] as? Double,
-       let longitudeRef = gpsDictionary[kCGImagePropertyGPSLongitudeRef as String] as? String,
-       let longitude = gpsDictionary[kCGImagePropertyGPSLongitude as String] as? Double {
-      
-      var coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-      
-      if latitudeRef == "S" {
-        coordinate.latitude *= -1
-      }
-      
-      if longitudeRef == "W" {
-        coordinate.longitude *= -1
-      }
-      
-      return coordinate
-    }
-    
-    return nil
+    return ImageMetadataUtil.gps(from: imageProperties)
   }
 }
