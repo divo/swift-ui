@@ -7,16 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E647B613-2B41-4B91-8AF9-D8153A2B52B2"
+            uuid = "C28F179E-52E8-4146-B55C-8D9A99080A67"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ImageUploadTest/ImageModel.swift"
+            filePath = "ImageUploadTest/ImageMetadataUtil.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "19"
-            endingLineNumber = "19"
-            landmarkName = "init(id:uiImage:metadata:)"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
+            landmarkName = "gps(from:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
